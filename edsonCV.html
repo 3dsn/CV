@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edson Marques Barbosa - Consultor Middleware</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Professional (Warm neutrals: bg-stone-100, text-gray-800; Accent: teal-600) -->
+    <!-- Application Structure Plan: A single-page dashboard design with a sticky navigation bar for easy access to key sections: Experience, Skills, Results, and Education. The core interaction is an interactive vertical timeline for work experience, allowing users to click to expand details. This structure was chosen to transform a static CV into an engaging, explorable professional profile, guiding the recruiter's focus towards key strengths and achievements rather than a simple chronological list. -->
+    <!-- Visualization & Content Choices: 
+    - Report Info: Career History -> Goal: Show progression and details -> Viz/Presentation: Interactive vertical timeline (HTML/CSS/JS) -> Interaction: Click to expand job details -> Justification: More engaging and organized than a long text block.
+    - Report Info: Technical Skills -> Goal: Compare expertise duration -> Viz/Presentation: Horizontal Bar Chart (Chart.js) showing estimated years of experience with key technologies -> Interaction: Hover for tooltips -> Justification: Visually quantifies depth of experience in core areas, which is more impactful than a list.
+    - Report Info: Key Results -> Goal: Highlight major achievements -> Viz/Presentation: Icon-driven cards in a grid (HTML/Tailwind) -> Interaction: Static, but high visual priority -> Justification: Makes achievements easily scannable and memorable.
+    - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; 
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #0d9488; 
+            border-bottom-color: #0d9488;
+        }
+        .timeline-item-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding: 0 1rem;
+        }
+        .timeline-item-content.open {
+            max-height: 500px;
+            padding: 1rem 1rem;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 max-w-6xl">
+            <div class="flex justify-between items-center">
+                <a href="#inicio" class="text-xl font-bold text-teal-700">Edson M. Barbosa</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#experiencia" class="nav-link font-medium pb-1">Experiência</a>
+                    <a href="#competencias" class="nav-link font-medium pb-1">Competências</a>
+                    <a href="#resultados" class="nav-link font-medium pb-1">Resultados</a>
+                    <a href="#formacao" class="nav-link font-medium pb-1">Formação</a>
+                </div>
+                 <div class="md:hidden">
+                    <select id="mobile-nav" class="bg-stone-200 border border-stone-300 rounded-md p-2 text-sm">
+                        <option value="#inicio">Início</option>
+                        <option value="#experiencia">Experiência</option>
+                        <option value="#competencias">Competências</option>
+                        <option value="#resultados">Resultados</option>
+                        <option value="#formacao">Formação</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 max-w-6xl">
+        
+        <section id="inicio" class="text-center min-h-[60vh] flex flex-col justify-center items-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-stone-900">Edson Marques Barbosa</h1>
+            <p class="mt-4 text-xl md:text-2xl text-teal-600 font-medium">Consultor Middleware & Especialista DevOps</p>
+            <p class="mt-8 max-w-3xl text-lg text-stone-700">
+                Profissional com 19 anos de sólida experiência em Sistemas de Informação, especializado no gerenciamento, administração e suporte de infraestrutura Java EE. Minha expertise abrange DevOps, automação e a implementação de soluções robustas que otimizam a performance e a segurança de ambientes críticos.
+            </p>
+            <div class="mt-10 flex flex-wrap justify-center gap-6 text-stone-600">
+                <span class="flex items-center gap-2">
+                    <span class="text-teal-700">&#9993;</span> edson.mbarbosa@gmail.com
+                </span>
+                <span class="flex items-center gap-2">
+                    <span class="text-teal-700">&#128222;</span> (35) 99125-7266
+                </span>
+                 <span class="flex items-center gap-2">
+                    <span class="text-teal-700">&#128205;</span> São Lourenço, MG
+                </span>
+            </div>
+        </section>
+
+        <section id="experiencia" class="py-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Linha do Tempo Profissional</h2>
+            <p class="text-center text-stone-600 max-w-3xl mx-auto mb-12">
+                Uma jornada através das minhas experiências mais relevantes, destacando os desafios e as tecnologias com as quais trabalhei. Clique em cada cargo para ver mais detalhes sobre as minhas responsabilidades e contribuições em cada empresa.
+            </p>
+            <div class="relative max-w-3xl mx-auto">
+                <div class="absolute left-1/2 h-full w-0.5 bg-stone-300 transform -translate-x-1/2"></div>
+                <div id="timeline-container" class="space-y-12">
+                </div>
+            </div>
+        </section>
+
+        <section id="competencias" class="py-20 bg-white rounded-2xl">
+             <h2 class="text-3xl font-bold text-center mb-4">Principais Competências Técnicas</h2>
+             <p class="text-center text-stone-600 max-w-3xl mx-auto mb-12">
+                Este gráfico visualiza meus anos de experiência estimados com tecnologias-chave, com base na minha trajetória profissional. Ele oferece uma visão clara da minha profundidade técnica nas ferramentas mais importantes do ecossistema de middleware e DevOps.
+            </p>
+            <div class="chart-container">
+                <canvas id="skillsChart"></canvas>
+            </div>
+        </section>
+
+        <section id="resultados" class="py-20">
+            <h2 class="text-3xl font-bold text-center mb-4">Principais Resultados e Realizações</h2>
+            <p class="text-center text-stone-600 max-w-3xl mx-auto mb-12">
+                Ao longo da minha carreira, foquei não apenas em manter sistemas, mas em otimizá-los. Aqui estão alguns dos impactos mais significativos que gerei, focados em padronização, eficiência de custos e segurança da informação.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 mt-8">
+                <div class="bg-white p-8 rounded-xl shadow-md border-t-4 border-teal-500 text-center">
+                    <div class="text-4xl text-teal-600 mb-4">&#128200;</div>
+                    <h3 class="text-xl font-bold mb-2">Padronização e Otimização</h3>
+                    <p class="text-stone-600">Liderança na padronização de infraestrutura WEB, criando documentação e políticas de Health Check que resultaram em maior estabilidade e performance dos sistemas.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md border-t-4 border-teal-500 text-center">
+                    <div class="text-4xl text-teal-600 mb-4">&#128181;</div>
+                    <h3 class="text-xl font-bold mb-2">Redução de Custos</h3>
+                    <p class="text-stone-600">Implementação de sistemas open source para monitoria, controle e documentação, gerando uma significativa redução de custos operacionais para as empresas.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md border-t-4 border-teal-500 text-center">
+                    <div class="text-4xl text-teal-600 mb-4">&#128737;</div>
+                    <h3 class="text-xl font-bold mb-2">Segurança e Conformidade</h3>
+                    <p class="text-stone-600">Gerenciamento de certificados, análise e correção de vulnerabilidades e implantação de políticas de segurança para assegurar a integridade dos ativos de informação.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="formacao" class="py-20 bg-white rounded-2xl">
+            <h2 class="text-3xl font-bold text-center mb-12">Formação e Especializações</h2>
+            <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 border-l-4 border-teal-500 pl-4">Formação Acadêmica</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-bold text-lg">Graduação em Tecnologia de Redes</p>
+                            <p class="text-stone-600">Instituto Brasileiro de Tecnologia Avançada (IBTA), 2006</p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-lg">Técnico em Informática com ênfase em TI</p>
+                            <p class="text-stone-600">SENAC / SP, 2002</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 border-l-4 border-teal-500 pl-4">Cursos e Certificações Chave</h3>
+                    <ul class="space-y-2 text-stone-700 list-inside">
+                        <li class="flex items-start"><span class="text-teal-600 mr-2 mt-1">&#10003;</span>Mastery Docker (Udemy)</li>
+                        <li class="flex items-start"><span class="text-teal-600 mr-2 mt-1">&#10003;</span>Fundamentos do Google Cloud Platform (CP100A)</li>
+                        <li class="flex items-start"><span class="text-teal-600 mr-2 mt-1">&#10003;</span>OpenStack (LinuxFoundationX – Edx)</li>
+                        <li class="flex items-start"><span class="text-teal-600 mr-2 mt-1">&#10003;</span>Consultor Java (Caelum)</li>
+                        <li class="flex items-start"><span class="text-teal-600 mr-2 mt-1">&#10003;</span>Certificação Oracle Application Server 10g</li>
+                        <li class="flex items-start"><span class="text-teal-600 mr-2 mt-1">&#10003;</span>Certificação Microsoft MCSE</li>
+                         <li class="flex items-start"><span class="text-teal-600 mr-2 mt-1">&#10003;</span>Inglês Avançado (Wiseup, Cultura Inglesa, BROWNS)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-8 text-center max-w-6xl">
+            <h3 class="text-2xl font-bold">Vamos conversar?</h3>
+            <p class="mt-2 text-stone-300">Estou sempre aberto a novas oportunidades e desafios.</p>
+            <div class="mt-6 flex justify-center items-center gap-6">
+                <a href="mailto:edson.mbarbosa@gmail.com" class="hover:text-teal-400 transition-colors">edson.mbarbosa@gmail.com</a>
+                <span class="text-stone-500">|</span>
+                <p>(35) 99125-7266</p>
+            </div>
+            <p class="text-stone-500 mt-8 text-sm">&copy; 2024 Edson Marques Barbosa. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const experienceData = [
+                {
+                    period: 'Fev/2018 – Jun/2018',
+                    company: 'Accenture Brasil',
+                    role: 'Especialista em Infraestrutura Middleware',
+                    details: [
+                        'Administração e suporte da infraestrutura Java EE (JBoss, Tomcat, Node.js, Apache/Nginx).',
+                        'Implantação e customização de ambientes virtuais utilizando Docker.',
+                        'Consultoria e administração de ambientes SOA para integração de sistemas legados.',
+                        'Monitoramento proativo e criação de base de conhecimento com documentação.',
+                        'Gerenciamento avançado de Sistemas Unix (HPUX, AIX), Linux e Windows.',
+                        'Automação de tarefas utilizando Shell Script, Perl, Python e Java.'
+                    ]
+                },
+                {
+                    period: 'Ago/2012 – Ago/2016',
+                    company: 'TIM (Consultoria Mastery)',
+                    role: 'Especialista em Infraestrutura Middleware / Weblogic',
+                    details: [
+                        'Suporte especializado a Servidores de Aplicação e Infraestrutura Middleware, incluindo Weblogic, Tomcat, JBoss, OAS, IPLANET, Apache e OHS.'
+                    ]
+                },
+                {
+                    period: 'Out/2011 – Abr/2012',
+                    company: 'Claro',
+                    role: 'Especialista em Infraestrutura Middleware / SOA',
+                    details: [
+                        'Administração e suporte da infraestrutura Java EE (Weblogic, WebMethods, JBoss, Tomcat).',
+                        'Consultoria em ambiente SOA para integração e replicação de sistemas.',
+                        'Gerenciamento de sistemas Unix (HPUX, AIX), Linux e Windows.',
+                        'Programação em Shell Script, Perl, Python e Java.'
+                    ]
+                },
+                {
+                    period: 'Nov/2009 – Out/2011',
+                    company: 'Oracle OnDemand (B2W)',
+                    role: 'Especialista em Infraestrutura Weblogic',
+                    details: [
+                        'Administração e suporte da infraestrutura Java EE (Oracle Weblogic) e Apache.',
+                        'Consultoria em ambientes de Lojas Virtuais de grande porte (Americanas, Submarino, etc.).',
+                        'Gerenciamento avançado de Sistemas Unix e Linux.',
+                        'Automação com Shell Script, Perl, Python e Java.'
+                    ]
+                },
+                {
+                    period: 'Set/2006 – Out/2009',
+                    company: 'EDS an HP Company',
+                    role: 'Especialista em Infraestrutura WEB',
+                    details: [
+                        'Administração e suporte da infraestrutura Java EE (Oracle AS, Weblogic, WebSphere, JBoss).',
+                        'Instalação e administração de Servidores Apache, IIS, DNS.',
+                        'Configuração de monitoria com Nagios.',
+                        'Gerenciamento de Sistemas Unix, Linux e Windows.',
+                        'Experiência com processos ITIL (Remedy / DW).',
+                        'Migração de sistemas legados com PHP.'
+                    ]
+                }
+            ];
+
+            const timelineContainer = document.getElementById('timeline-container');
+            experienceData.forEach((item, index) => {
+                const isLeft = index % 2 === 0;
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `timeline-item relative flex items-center ${isLeft ? 'justify-start' : 'justify-end'}`;
+
+                let content = `
+                    <div class="absolute w-4 h-4 rounded-full bg-teal-600 left-1/2 -translate-y-4 sm:translate-y-0 transform -translate-x-1/2"></div>
+                    <div class="w-full md:w-1/2 ${isLeft ? 'md:pr-8' : 'md:pl-8'}">
+                        <div class="bg-white rounded-lg shadow-lg p-4 cursor-pointer timeline-header">
+                            <p class="text-sm text-stone-500">${item.period}</p>
+                            <h3 class="text-lg font-bold text-teal-700">${item.role}</h3>
+                            <p class="text-md text-stone-600">${item.company}</p>
+                            <span class="text-xs text-stone-500 float-right">Clique para ver detalhes ▼</span>
+                        </div>
+                        <div class="bg-stone-50 rounded-b-lg timeline-item-content">
+                            <ul class="list-disc list-inside text-stone-700 space-y-1 text-sm pt-2">
+                                ${item.details.map(d => `<li>${d}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                timelineItem.innerHTML = content;
+                timelineContainer.appendChild(timelineItem);
+            });
+            
+            document.querySelectorAll('.timeline-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    content.classList.toggle('open');
+                });
+            });
+
+            const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+            new Chart(skillsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Weblogic', 'JBoss/Tomcat', 'SOA/Integração', 'DevOps (Docker, CI/CD)', 'Linux/Unix', 'Scripting (Python/Shell)', 'Cloud (GCP/OpenStack)'],
+                    datasets: [{
+                        label: 'Anos de Experiência (Estimado)',
+                        data: [10, 9, 8, 5, 15, 12, 4],
+                        backgroundColor: 'rgba(13, 148, 136, 0.6)',
+                        borderColor: 'rgba(13, 148, 136, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Anos de Experiência (Estimado)',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                         y: {
+                            ticks: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw} anos`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileNav.addEventListener('change', () => {
+                window.location.href = mobileNav.value;
+            });
+        });
+    </script>
+</body>
+</html>
